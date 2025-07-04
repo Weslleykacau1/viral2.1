@@ -3,7 +3,7 @@
 
 import { useState, useEffect } from 'react';
 
-import type { Influencer, Scene, ActiveView, LoadingStates } from '@/types';
+import type { Influencer, Scene, ActiveView, LoadingStates, ThumbnailIdeas } from '@/types';
 import { useToast } from "@/hooks/use-toast";
 import { handleImageUpload as handleImageUploadUtil } from '@/lib/utils';
 import { analyzeTextProfile } from '@/ai/flows/analyze-text-profile';
@@ -98,6 +98,19 @@ export default function ScriptifyStudio() {
         setLoadingStates(prev => ({ ...prev, [key]: value }));
     };
 
+    const handleError = (error: any, title: string = "Erro Inesperado") => {
+        let description = "Ocorreu um erro ao processar o seu pedido. Tente novamente.";
+        if (error?.message && typeof error.message === 'string') {
+            if (error.message.includes('FAILED_PRECONDITION') || error.message.includes('API key')) {
+                title = "Erro de Configuração da API";
+                description = "A sua chave de API do Gemini não foi configurada ou é inválida. Adicione-a ao ficheiro .env.local ou às variáveis de ambiente do seu projeto.";
+            } else {
+                description = error.message;
+            }
+        }
+        toast({ variant: 'destructive', title, description });
+    };
+
     const handleImageUpload = (e: React.ChangeEvent<HTMLInputElement>, imageType: 'influencer' | 'scenario' | 'product') => {
         handleImageUploadUtil(e, ({ preview, base64, type, file }) => {
             switch(imageType) {
@@ -123,7 +136,7 @@ export default function ScriptifyStudio() {
             setInfluencer(prev => ({ ...prev, ...result, seed: getInitialInfluencerState().seed }));
             toast({ title: "Características preenchidas a partir do texto!", className: "bg-green-100 text-green-800" });
         } catch (error: any) {
-            toast({ variant: 'destructive', title: "Erro na Análise", description: error.message });
+            handleError(error, "Erro na Análise de Texto");
         } finally {
             setLoading('analyzingFromText', false);
         }
@@ -140,7 +153,7 @@ export default function ScriptifyStudio() {
             setInfluencer(prev => ({ ...prev, ...result, imagePreview: photoDataUri, seed: getInitialInfluencerState().seed }));
             toast({ title: "Características preenchidas com detalhe!", className: "bg-green-100 text-green-800" });
         } catch (error: any) {
-            toast({ variant: 'destructive', title: "Erro na Análise", description: error.message });
+            handleError(error, "Erro na Análise da Imagem");
         } finally {
             setLoading('analyzingInfluencer', false);
         }
@@ -157,7 +170,7 @@ export default function ScriptifyStudio() {
             setCurrentScene(prev => ({ ...prev, setting: result.settingDescription || '' }));
             toast({ title: "Cenário preenchido com base na imagem!", className: "bg-green-100 text-green-800" });
         } catch (error: any) {
-            toast({ variant: 'destructive', title: "Erro na Análise", description: error.message });
+            handleError(error, "Erro na Análise do Cenário");
         } finally {
             setLoading('analyzingScenario', false);
         }
@@ -174,7 +187,7 @@ export default function ScriptifyStudio() {
             setCurrentScene(prev => ({ ...prev, action: result.sceneAction || '' }));
             toast({ title: "Ação principal gerada com sucesso!", className: "bg-green-100 text-green-800" });
         } catch (error: any) {
-            toast({ variant: 'destructive', title: "Erro na Geração da Ação", description: error.message });
+            handleError(error, "Erro na Geração da Ação");
         } finally {
             setLoading('generatingAction', false);
         }
@@ -192,7 +205,7 @@ export default function ScriptifyStudio() {
             setCurrentScene(prev => ({ ...prev, title: result.sceneTitle || '' }));
             toast({ title: "Título da cena gerado com sucesso!", className: "bg-green-100 text-green-800" });
         } catch (error: any) {
-            toast({ variant: 'destructive', title: "Erro na Geração do Título", description: error.message });
+            handleError(error, "Erro na Geração do Título");
         } finally {
             setLoading('generatingTitle', false);
         }
@@ -213,7 +226,7 @@ export default function ScriptifyStudio() {
             setCurrentScene(prev => ({ ...prev, dialogue: result.dialogue || '' }));
             toast({ title: "Diálogo gerado com sucesso!", className: "bg-green-100 text-green-800" });
         } catch (error: any) {
-            toast({ variant: 'destructive', title: "Erro na Geração do Diálogo", description: error.message });
+            handleError(error, "Erro na Geração do Diálogo");
         } finally {
             setLoading('generatingDialogue', false);
         }
@@ -229,7 +242,7 @@ export default function ScriptifyStudio() {
             setCurrentScene(prev => ({ ...prev, productDescription: result.productDescription || '' }));
             toast({ title: "Descrição do produto gerada!", className: "bg-green-100 text-green-800" });
         } catch (error: any) {
-            toast({ variant: 'destructive', title: "Erro na Análise", description: error.message });
+            handleError(error, "Erro na Análise do Produto");
         } finally {
             setLoading('analyzingProduct', false);
         }
@@ -298,9 +311,9 @@ export default function ScriptifyStudio() {
             dismissToast();
             toast({ title: "Prompt gerado com sucesso!", className: "bg-green-100 text-green-800" });
         } catch (error: any) {
-            setGeneratedContent(`**Falha ao gerar prompt:**\n\n${error.message}`);
+            setGeneratedContent('');
             dismissToast();
-            toast({ variant: 'destructive', title: "Erro na Geração do Prompt", description: error.message });
+            handleError(error, "Erro na Geração do Prompt");
         } finally {
             setLoading('generatingScript', false);
         }
@@ -325,7 +338,7 @@ export default function ScriptifyStudio() {
             setGeneratedVeoPrompt(result.veoPrompt);
             toast({ title: "Prompt para Veo gerado com sucesso!", className: "bg-green-100 text-green-800" });
         } catch (error: any) {
-            toast({ variant: 'destructive', title: "Erro na Geração do Prompt Veo", description: error.message });
+            handleError(error, "Erro na Geração do Prompt Veo");
         } finally {
             setLoading('generatingVeoPrompt', false);
         }
@@ -343,8 +356,8 @@ export default function ScriptifyStudio() {
             setGeneratedSeoContent(responseText);
             toast({ title: "SEO gerado com sucesso!", className: "bg-green-100 text-green-800" });
         } catch (error: any) {
-            setGeneratedSeoContent(`**Falha ao gerar SEO:**\n\n${error.message}`);
-            toast({ variant: 'destructive', title: "Erro na Geração de SEO", description: error.message });
+            setGeneratedSeoContent('');
+            handleError(error, "Erro na Geração de SEO");
         } finally {
             setLoading('generatingSeo', false);
         }
@@ -372,8 +385,7 @@ export default function ScriptifyStudio() {
             toast({ title: "Cena criada a partir do vídeo!", description: `Cena "${newScene.title}" carregada no editor.`, className: "bg-green-100 text-green-800" });
 
         } catch (error: any) {
-            console.error("Failed to analyze YouTube video:", error);
-            toast({ variant: 'destructive', title: "Erro na Análise", description: error.message });
+            handleError(error, "Erro na Análise do YouTube");
         } finally {
             setLoading('analyzingYouTube', false);
         }
@@ -391,7 +403,7 @@ export default function ScriptifyStudio() {
             setGeneratedThumbnailIdeas(result);
             toast({ title: "Ideias para thumbnail geradas!", className: "bg-green-100 text-green-800" });
         } catch (error: any) {
-            toast({ variant: 'destructive', title: "Erro na Geração", description: error.message });
+            handleError(error, "Erro na Geração da Thumbnail");
         } finally {
             setLoading('generatingThumbnail', false);
         }
@@ -427,7 +439,7 @@ export default function ScriptifyStudio() {
             setGeneratedQuickScene(newScene);
             toast({ title: "Cena rápida gerada com sucesso!", className: "bg-green-100 text-green-800" });
         } catch (error: any) {
-            toast({ variant: 'destructive', title: "Erro ao gerar cena", description: error.message });
+            handleError(error, "Erro ao Gerar Cena Rápida");
         } finally {
             setLoading('generatingQuickScene', false);
         }
@@ -476,8 +488,7 @@ export default function ScriptifyStudio() {
             });
 
         } catch (error: any) {
-            console.error("Failed to generate viral script:", error);
-            toast({ variant: 'destructive', title: "Erro na Geração", description: error.message });
+            handleError(error, "Erro na Geração do Roteiro Viral");
         } finally {
             setLoading('generatingViralScript', false);
         }
@@ -734,5 +745,3 @@ export default function ScriptifyStudio() {
         </div>
     );
 }
-
-    
