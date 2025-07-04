@@ -19,7 +19,7 @@ interface CreatorViewProps {
   generatedSeoContent: string;
   generatedVeoPrompt: string;
   loadingStates: LoadingStates;
-  isLoggedIn: boolean;
+  isApiConfigured: boolean;
   handlers: {
     analyzeAndFillFromText: () => Promise<void>;
     analyzeInfluencerImageAndFill: () => Promise<void>;
@@ -53,7 +53,7 @@ export default function CreatorView({
   generatedSeoContent,
   generatedVeoPrompt,
   loadingStates,
-  isLoggedIn,
+  isApiConfigured,
   handlers,
 }: CreatorViewProps) {
   return (
@@ -65,7 +65,7 @@ export default function CreatorView({
         setPastedText={setPastedText}
         imagePreview={influencer.imagePreview || ''}
         loadingStates={loadingStates}
-        isLoggedIn={isLoggedIn}
+        isApiConfigured={isApiConfigured}
         handlers={{
           analyzeAndFillFromText: handlers.analyzeAndFillFromText,
           analyzeInfluencerImageAndFill: handlers.analyzeInfluencerImageAndFill,
@@ -79,7 +79,7 @@ export default function CreatorView({
         currentScene={currentScene}
         setCurrentScene={setCurrentScene}
         loadingStates={loadingStates}
-        isLoggedIn={isLoggedIn}
+        isApiConfigured={isApiConfigured}
         handlers={{
           analyzeScenarioImageAndFill: handlers.analyzeScenarioImageAndFill,
           analyzeAndDescribeProduct: handlers.analyzeAndDescribeProduct,
@@ -102,7 +102,7 @@ export default function CreatorView({
         generatedVeoPrompt={generatedVeoPrompt}
         loading={loadingStates.generatingScript}
         loadingVeo={loadingStates.generatingVeoPrompt}
-        isLoggedIn={isLoggedIn}
+        isApiConfigured={isApiConfigured}
         onGenerate={() => handlers.generateSceneContent(currentScene)}
         onGenerateVeoPrompt={handlers.generateVeoPrompt}
         isGenerationDisabled={!currentScene.setting || !influencer.id}

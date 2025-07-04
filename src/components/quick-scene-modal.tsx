@@ -19,11 +19,11 @@ interface QuickSceneModalProps {
   onSave: () => Promise<void>;
   generatedScene: Scene | null;
   loading: boolean;
-  isLoggedIn: boolean;
+  isApiConfigured: boolean;
 }
 
 export function QuickSceneModal({
-  isOpen, onClose, influencer, onGenerate, onSave, generatedScene, loading, isLoggedIn
+  isOpen, onClose, influencer, onGenerate, onSave, generatedScene, loading, isApiConfigured
 }: QuickSceneModalProps) {
   const [jokeTheme, setJokeTheme] = useState('');
   const [scenarioSuggestion, setScenarioSuggestion] = useState('');
@@ -105,7 +105,7 @@ export function QuickSceneModal({
           <AiButton
             onClick={handleGenerateClick}
             loading={loading}
-            isLoggedIn={isLoggedIn}
+            isApiConfigured={isApiConfigured}
             disabled={!jokeTheme.trim()}
           >
             <Bot className="mr-2 h-5 w-5" />

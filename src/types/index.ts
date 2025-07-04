@@ -45,7 +45,6 @@ export interface ThumbnailIdeas {
 }
 
 export type ActiveView = 'creator' | 'influencerGallery' | 'sceneGallery' | 'viralVideo';
-export type ApiKeyStatus = 'idle' | 'valid' | 'invalid' | 'testing';
 
 export type LoadingStates = {
     savingInfluencer: boolean;
@@ -55,7 +54,6 @@ export type LoadingStates = {
     analyzingProduct: boolean;
     generatingScript: boolean;
     analyzingFromText: boolean;
-    testingApi: boolean;
     generatingSeo: boolean;
     generatingAction: boolean;
     generatingTitle: boolean;

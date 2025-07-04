@@ -1,0 +1,10 @@
+{
+  "engines": {
+    "node": "18.x"
+  },
+  "build": {
+    "env": {
+      "GENKIT_ENV": "production"
+    }
+  }
+}

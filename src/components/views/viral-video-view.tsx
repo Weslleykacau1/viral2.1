@@ -15,7 +15,7 @@ interface ViralVideoViewProps {
   onGenerate: (referenceImageDataUri: string, videoTheme: string) => void;
   generatedIdeas: ThumbnailIdeas | null;
   loading: boolean;
-  isLoggedIn: boolean;
+  isApiConfigured: boolean;
   youtubeUrl: string;
   setYoutubeUrl: (url: string) => void;
   onAnalyzeVideo: () => void;
@@ -25,7 +25,7 @@ interface ViralVideoViewProps {
 }
 
 export default function ViralVideoView({ 
-    onGenerate, generatedIdeas, loading, isLoggedIn, 
+    onGenerate, generatedIdeas, loading, isApiConfigured, 
     youtubeUrl, setYoutubeUrl, onAnalyzeVideo, loadingYouTube,
     onGenerateViralScript, loadingViralScript
 }: ViralVideoViewProps) {
@@ -83,7 +83,7 @@ export default function ViralVideoView({
               <AiButton
                   onClick={onAnalyzeVideo}
                   loading={loadingYouTube}
-                  isLoggedIn={isLoggedIn}
+                  isApiConfigured={isApiConfigured}
                   disabled={!youtubeUrl.trim()}
                   className="bg-red-500 text-white hover:bg-red-600"
               >
@@ -139,7 +139,7 @@ export default function ViralVideoView({
             <AiButton
               onClick={handleGenerateClick}
               loading={loading}
-              isLoggedIn={isLoggedIn}
+              isApiConfigured={isApiConfigured}
               disabled={!influencerPhotoPreview || !videoTheme.trim()}
               className="w-full bg-primary text-primary-foreground hover:bg-primary/90"
             >
@@ -222,7 +222,7 @@ export default function ViralVideoView({
                 <AiButton
                     onClick={handleGenerateViralScriptClick}
                     loading={loadingViralScript}
-                    isLoggedIn={isLoggedIn}
+                    isApiConfigured={isApiConfigured}
                     disabled={!generatedIdeas}
                     className="w-full bg-gradient-to-r from-purple-500 to-pink-500 text-white shadow-lg transition-transform hover:scale-105"
                 >

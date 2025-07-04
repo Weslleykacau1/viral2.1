@@ -5,12 +5,12 @@ import { cn } from "@/lib/utils";
 import { Loader2 } from "lucide-react";
 
 interface AiButtonProps extends ButtonProps {
-  isLoggedIn: boolean;
+  isApiConfigured: boolean;
   loading?: boolean;
 }
 
-export function AiButton({ isLoggedIn, loading, children, className, disabled, ...props }: AiButtonProps) {
-  const isEffectivelyDisabled = disabled || loading || !isLoggedIn;
+export function AiButton({ isApiConfigured, loading, children, className, disabled, ...props }: AiButtonProps) {
+  const isEffectivelyDisabled = disabled || loading || !isApiConfigured;
 
   const buttonContent = (
     <>
@@ -25,7 +25,7 @@ export function AiButton({ isLoggedIn, loading, children, className, disabled, .
     </Button>
   );
 
-  if (isLoggedIn) {
+  if (isApiConfigured) {
     return button;
   }
 
@@ -36,7 +36,7 @@ export function AiButton({ isLoggedIn, loading, children, className, disabled, .
           <div className="w-full">{button}</div> 
         </TooltipTrigger>
         <TooltipContent>
-          <p>Insira uma chave API para usar esta função.</p>
+          <p>Configure sua chave de API nas variáveis de ambiente do seu projeto.</p>
         </TooltipContent>
       </Tooltip>
     </TooltipProvider>

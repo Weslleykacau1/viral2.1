@@ -19,7 +19,7 @@ interface ScriptGeneratorProps {
   generatedVeoPrompt: string;
   loading: boolean;
   loadingVeo: boolean;
-  isLoggedIn: boolean;
+  isApiConfigured: boolean;
   isGenerationDisabled: boolean;
   influencerId: string | null;
   sceneSetting: string;
@@ -28,7 +28,7 @@ interface ScriptGeneratorProps {
 }
 
 export default function ScriptGenerator({
-  outputFormat, setOutputFormat, generatedContent, setGeneratedContent, generatedSeoContent, generatedVeoPrompt, loading, loadingVeo, isLoggedIn, isGenerationDisabled, influencerId, sceneSetting, onGenerate, onGenerateVeoPrompt
+  outputFormat, setOutputFormat, generatedContent, setGeneratedContent, generatedSeoContent, generatedVeoPrompt, loading, loadingVeo, isApiConfigured, isGenerationDisabled, influencerId, sceneSetting, onGenerate, onGenerateVeoPrompt
 }: ScriptGeneratorProps) {
   const [copySuccess, setCopySuccess] = useState(false);
   const [copySeoSuccess, setCopySeoSuccess] = useState(false);
@@ -36,7 +36,7 @@ export default function ScriptGenerator({
   const { toast } = useToast();
 
   const getDisabledMessage = () => {
-    if (isGenerationDisabled && isLoggedIn) {
+    if (isGenerationDisabled && isApiConfigured) {
         const reasons = [];
         if (!influencerId) {
             reasons.push("carregar ou guardar um influenciador");
@@ -120,13 +120,13 @@ export default function ScriptGenerator({
             </RadioGroup>
           </div>
           <div className="flex flex-wrap items-start gap-2">
-            <AiButton onClick={onGenerate} loading={loading} isLoggedIn={isLoggedIn} disabled={isGenerationDisabled} className="bg-primary text-primary-foreground hover:bg-primary/90">
+            <AiButton onClick={onGenerate} loading={loading} isApiConfigured={isApiConfigured} disabled={isGenerationDisabled} className="bg-primary text-primary-foreground hover:bg-primary/90">
               {loading ? 'A gerar...' : 'Gerar Prompt do Roteiro'}
             </AiButton>
             <AiButton 
               onClick={onGenerateVeoPrompt} 
               loading={loadingVeo} 
-              isLoggedIn={isLoggedIn} 
+              isApiConfigured={isApiConfigured} 
               disabled={isGenerationDisabled}
               variant="secondary"
               className="border border-purple-300 bg-purple-50 text-purple-800 hover:bg-purple-100 dark:border-purple-700 dark:bg-purple-900/30 dark:text-purple-300 dark:hover:bg-purple-900/50"

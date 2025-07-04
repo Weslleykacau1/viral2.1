@@ -16,7 +16,7 @@ interface SceneEditorProps {
   currentScene: Scene;
   setCurrentScene: (scene: Scene | ((prev: Scene) => Scene)) => void;
   loadingStates: LoadingStates;
-  isLoggedIn: boolean;
+  isApiConfigured: boolean;
   handlers: {
     analyzeScenarioImageAndFill: () => Promise<void>;
     analyzeAndDescribeProduct: () => Promise<void>;
@@ -31,7 +31,7 @@ interface SceneEditorProps {
 }
 
 export default function SceneEditor({
-  currentScene, setCurrentScene, loadingStates, isLoggedIn, handlers
+  currentScene, setCurrentScene, loadingStates, isApiConfigured, handlers
 }: SceneEditorProps) {
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
@@ -59,7 +59,7 @@ export default function SceneEditor({
             <AiButton
                 onClick={handlers.generateSceneTitle}
                 loading={loadingStates.generatingTitle}
-                isLoggedIn={isLoggedIn}
+                isApiConfigured={isApiConfigured}
                 disabled={!currentScene.setting.trim() || !currentScene.action.trim()}
                 className="mt-2"
                 variant="secondary"
@@ -76,7 +76,7 @@ export default function SceneEditor({
                 <Button asChild variant="outline"><Label htmlFor="scenario-image-upload" className="cursor-pointer gap-2"><FileIcon className="h-4 w-4"/> Escolher ficheiro</Label></Button>
                 {currentScene.scenarioImagePreview && <Image src={currentScene.scenarioImagePreview} alt="Prévia do cenário" width={40} height={40} className="h-10 w-10 rounded-md object-cover" />}
             </div>
-            {currentScene.scenarioImagePreview && <AiButton onClick={handlers.analyzeScenarioImageAndFill} loading={loadingStates.analyzingScenario} isLoggedIn={isLoggedIn} className="bg-teal-500 hover:bg-teal-600 dark:bg-teal-600 dark:hover:bg-teal-700 text-white"><Bot className="mr-2 h-5 w-5"/>Analisar Cenário</AiButton>}
+            {currentScene.scenarioImagePreview && <AiButton onClick={handlers.analyzeScenarioImageAndFill} loading={loadingStates.analyzingScenario} isApiConfigured={isApiConfigured} className="bg-teal-500 hover:bg-teal-600 dark:bg-teal-600 dark:hover:bg-teal-700 text-white"><Bot className="mr-2 h-5 w-5"/>Analisar Cenário</AiButton>}
         </div>
 
         <div>
@@ -90,7 +90,7 @@ export default function SceneEditor({
              <AiButton
                 onClick={handlers.generateSceneAction}
                 loading={loadingStates.generatingAction}
-                isLoggedIn={isLoggedIn}
+                isApiConfigured={isApiConfigured}
                 disabled={!currentScene.setting.trim()}
                 className="mt-2"
                 variant="secondary"
@@ -106,7 +106,7 @@ export default function SceneEditor({
                 <AiButton
                     onClick={handlers.generateSceneDialogue}
                     loading={loadingStates.generatingDialogue}
-                    isLoggedIn={isLoggedIn}
+                    isApiConfigured={isApiConfigured}
                     disabled={!currentScene.setting.trim() || !currentScene.action.trim()}
                     variant="secondary"
                 >
@@ -116,7 +116,7 @@ export default function SceneEditor({
                 <AiButton
                     onClick={handlers.generateDialogueSeo}
                     loading={loadingStates.generatingSeo}
-                    isLoggedIn={isLoggedIn}
+                    isApiConfigured={isApiConfigured}
                     disabled={!currentScene.dialogue.trim()}
                     variant="secondary"
                 >
@@ -222,7 +222,7 @@ export default function SceneEditor({
                     <Button asChild variant="outline"><Label htmlFor="product-image-upload" className="cursor-pointer gap-2"><FileIcon className="h-4 w-4"/>Escolher ficheiro</Label></Button>
                     {currentScene.productImagePreview && <Image src={currentScene.productImagePreview} alt="Prévia do produto" width={40} height={40} className="h-10 w-10 rounded-md object-cover" />}
                  </div>
-                {currentScene.productImagePreview && <div className="mt-4"><AiButton onClick={handlers.analyzeAndDescribeProduct} loading={loadingStates.analyzingProduct} isLoggedIn={isLoggedIn} className="bg-green-600 hover:bg-green-700 text-white"><Bot className="mr-2 h-5 w-5"/>Analisar Produto</AiButton></div>}
+                {currentScene.productImagePreview && <div className="mt-4"><AiButton onClick={handlers.analyzeAndDescribeProduct} loading={loadingStates.analyzingProduct} isApiConfigured={isApiConfigured} className="bg-green-600 hover:bg-green-700 text-white"><Bot className="mr-2 h-5 w-5"/>Analisar Produto</AiButton></div>}
             </div>
             <div><Label>Descrição do Produto</Label><Textarea name="productDescription" value={currentScene.productDescription} onChange={handleInputChange} placeholder="Descrição detalhada do produto..."/></div>
             <div className="flex items-center space-x-2"><Checkbox id="isPartnership" name="isPartnership" checked={currentScene.isPartnership} onCheckedChange={(checked) => setCurrentScene(p => ({...p, isPartnership: !!checked}))} /><Label htmlFor="isPartnership">É uma parceria / conteúdo patrocinado.</Label></div>

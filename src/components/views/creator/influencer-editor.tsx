@@ -18,7 +18,7 @@ interface InfluencerEditorProps {
   setPastedText: (text: string) => void;
   imagePreview: string;
   loadingStates: LoadingStates;
-  isLoggedIn: boolean;
+  isApiConfigured: boolean;
   handlers: {
     analyzeAndFillFromText: () => Promise<void>;
     analyzeInfluencerImageAndFill: () => Promise<void>;
@@ -29,7 +29,7 @@ interface InfluencerEditorProps {
 }
 
 export default function InfluencerEditor({
-  influencer, setInfluencer, pastedText, setPastedText, imagePreview, loadingStates, isLoggedIn, handlers
+  influencer, setInfluencer, pastedText, setPastedText, imagePreview, loadingStates, isApiConfigured, handlers
 }: InfluencerEditorProps) {
   
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
@@ -69,7 +69,7 @@ export default function InfluencerEditor({
                  )}
               </div>
               <div className="w-full space-y-2 sm:w-2/3">
-                 <AiButton onClick={handlers.analyzeInfluencerImageAndFill} loading={loadingStates.analyzingInfluencer} isLoggedIn={isLoggedIn} className="bg-primary text-primary-foreground hover:bg-primary/90">
+                 <AiButton onClick={handlers.analyzeInfluencerImageAndFill} loading={loadingStates.analyzingInfluencer} isApiConfigured={isApiConfigured} className="bg-primary text-primary-foreground hover:bg-primary/90">
                     <Bot className="mr-2 h-5 w-5" /> Analisar Imagem
                  </AiButton>
                  <p className="text-xs text-muted-foreground">Dica: A análise será detalhada, incluindo características faciais, cabelo, estilo e personalidade.</p>
@@ -79,7 +79,7 @@ export default function InfluencerEditor({
           <div className="space-y-2 rounded-xl border border-dashed p-4">
              <Label htmlFor="pastedText" className="flex items-center gap-2 font-medium"><ClipboardPaste /> Cole as Características</Label>
              <Textarea id="pastedText" value={pastedText} onChange={(e) => setPastedText(e.target.value)} placeholder="Cole aqui um texto com as características do influenciador..." className="h-24" />
-             <AiButton onClick={handlers.analyzeAndFillFromText} loading={loadingStates.analyzingFromText} isLoggedIn={isLoggedIn} className="w-full bg-primary text-primary-foreground hover:bg-primary/90">Analisar Texto e Preencher</AiButton>
+             <AiButton onClick={handlers.analyzeAndFillFromText} loading={loadingStates.analyzingFromText} isApiConfigured={isApiConfigured} className="w-full bg-primary text-primary-foreground hover:bg-primary/90">Analisar Texto e Preencher</AiButton>
           </div>
         </div>
 
