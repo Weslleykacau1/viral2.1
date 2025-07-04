@@ -7,7 +7,7 @@
  */
 
 import { ai } from '@/ai/genkit';
-import { listModels } from 'genkit/ai';
+import { listModels } from 'genkit';
 
 export async function checkApiConfiguration() {
   try {
